@@ -10,8 +10,27 @@ export default {
 }
 </script>
 
-<style lang="stylus">
+<style lang="stylus" >
 li
-  display block
-  margin  10px 0
+  display inline-block
+  border-radius 5px
+  border 1px solid #333
+  padding 10px
+  margin 10px
+  transition 1s
+li:hover
+  background-color: #333
+li h2
+  margin 0
+li h2 a
+  text-decoration none
+li img
+  border-radius 100px 30px
+  transition .5s
+li:hover > img
+  border-radius 100%
+  box-shadow 3px 3px 20px #333
+li:hover > h2 a
+  font-weight bold
+  text-decoration underline
 </style>

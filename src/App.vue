@@ -2,6 +2,10 @@
   #app
     img(src='./assets/logo.png')
     h1 Platzi-Music
+    p Top de artistas mas populares de acuerdo a el nombre de la ciudad.
+    select(v-model="countrySelected")
+      option(v-for="country in  countries" :value="country.value") {{ country.name }}
+    loader(v-show="loading")
     ul
       artist(v-for='artist in artists' v-bind:artist="artist" v-bind:key="artist.mbid") {{ artist.name}}
 
@@ -10,22 +14,44 @@
 <script>
 import Artist from './components/Artist.vue'
 import getArtists from './api';
+import Loader from './components/Loader.vue'
 export default {
   name: 'app',
   data () {
     return {
-      artists: []
+      artists: [],
+      countries:[
+        {name:'Mexico', value:'mexico'},
+        {name:'Argentina', value:'argentina'},
+        {name:'España', value:'spain'},
+      ],
+      countrySelected:'mexico',
+      loading: true,
     }
   },
   components:{
-    Artist
+    Artist,Loader
+  },
+  methods:{
+    reloadCountry(){
+      const self = this
+      this.loading = true
+      this.artists=[]
+      getArtists(this.countrySelected)
+      .then(function(artists){
+        self.artists = artists
+        self.loading=false
+      })
+    }
   },
   mounted: function(){
-    const self = this
-    getArtists()
-    .then(function(artists){
-      self.artists = artists
-    })
+    this.reloadCountry();
+  },
+  watch:{
+    countrySelected(){
+      this.loading = false
+      this.reloadCountry()
+    }
   }
 }
 </script>
@@ -38,6 +64,7 @@ export default {
   text-align center
   color #2c3e50
   margin-top 60px
+  overflow hidden
 
 h1, h2
   font-weight normal
